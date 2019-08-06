@@ -1,0 +1,29 @@
+
+
+.folder, .note {
+    border: 1px solid black;
+}
+
+.mainFolder {
+    padding-top: 10px;
+}
+
+.folder {
+    padding: 30px 100px; /*top/bottom right/left*/
+}
+
+.note {
+    margin: 10px;
+    padding: 20px 80px 20px 10px; /*top right bottom left*/
+}
+
+.modified {
+    padding-top: 10px;
+}
+
+.notesHome {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+

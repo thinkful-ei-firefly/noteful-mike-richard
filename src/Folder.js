@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import store from './store.js';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import './Main.css'
 
 
 export default class App extends Component {
@@ -8,24 +9,25 @@ export default class App extends Component {
     render() {
         const matchingNotes = store.notes.filter(note => note.folderId === this.props.match.params.folderId);
       return (
-          <div>
-              <section className="folders">
-                <h2>Folders</h2>
+          <div className="notesHome">
+              <section className="mainFolders">
                     {store.folders.map(folder =>
-                    <div key={folder.id}>
+                    <div className="folder" key={folder.id}>
                         <Link to={`/folder/${folder.id}`}>
                         {folder.name}
                         </Link>
                     </div>
                     )}
               </section>
-              <section className="notes">
-                <h2>Notes</h2>
+              <section className="mainNotes">
                     {matchingNotes.map(note =>
-                    <div key={note.id}>
+                    <div className="note" key={note.id}>
                         <Link to={`/note/${note.id}`}>
                         {note.name}
                         </Link>
+                        <div className="modified">
+                            {note.modified}
+                        </div>
                     </div>
                     )}
               </section>

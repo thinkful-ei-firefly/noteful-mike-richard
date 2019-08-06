@@ -1,0 +1,27 @@
+.goBack, .noteName {
+    border: 1px solid black;
+}
+
+.goBack {
+    margin: 10px;
+    padding: 30px 100px;
+    text-align: center;
+}
+
+.currentFolder {
+    font-size: 24px;
+    text-align: right;
+    margin: 10px;
+    padding: 30px 100px;
+}
+
+.currentNote {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.content {
+    margin: 10px;
+    padding: 20px 80px 20px 10px;
+}
