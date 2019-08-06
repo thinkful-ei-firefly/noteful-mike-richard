@@ -19,12 +19,10 @@ class App extends Component {
               path='/'
               component={Main}
             />
-            <div>Folders</div>
               <Route
               path='/folder/:folderId'
               component={Folder}
             />
-            <div>Notes</div>
               <Route
               path='/note/:noteId'
               component={Note}

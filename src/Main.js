@@ -25,6 +25,7 @@ export default class App extends Component {
                         <Link to={`note/${note.id}`}>
                         {note.name}
                         </Link>
+                        {note.modified}
                     </div>
                     )}
               </section>
