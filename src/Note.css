@@ -26,3 +26,9 @@
     margin: 10px;
     padding: 20px 80px 20px 10px;
 }
+
+@media (max-width: 600px) {
+    .currentNote {
+        flex-wrap: wrap-reverse;
+    }
+}
