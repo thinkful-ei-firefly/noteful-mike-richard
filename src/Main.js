@@ -1,36 +1,18 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import store from './store'
+import React from 'react';
+import FolderList from './FolderList';
+import NoteList from './NoteList';
+
 import './Main.css';
 
-export default class App extends Component {
+
+export default class App extends React.Component {
+
     render() {
-      return (
-          <div className="notesHome">
-              <section className="mainFolder">
-                    {store.folders.map(folder =>
-                    <div className="folder" key={folder.id}>
-                        <Link to={`/folder/${folder.id}`}>
-                        {folder.name}
-                        </Link>
-                    </div>
-                    )}
-              </section>
-              <section className="mainNotes">
-                  {store.notes.map(note =>
-                    <div className="note" key={note.id}>
-                        <Link to={`note/${note.id}`}>
-                        {note.name}
-                        </Link>
-                        <div className="modified">
-                            {note.modified}
-                        </div>
-                        
-                    </div>
-                    )}
-              </section>
-            
-          </div>
-      )
+        return (
+            <div className="notesHome">
+                        <FolderList />
+                        <NoteList />
+            </div>
+        )
     }
 }

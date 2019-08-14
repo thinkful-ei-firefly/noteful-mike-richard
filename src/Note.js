@@ -1,40 +1,46 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import UserContext from './UserContext';
+
 import './Note.css';
-import store from './store';
 
+export default class App extends React.Component {
 
-export default class App extends Component {
+    static contextType = UserContext;
+
     render() {
-        const currentNote = store.notes.find(note => note.id === this.props.match.params.noteId);
-        const currentFolder = store.folders.find(folder => folder.id === currentNote.folderId);
-    return (
-        <div className="currentNote">
-            <section>
-                <div className="goBack">Go Back</div>
-                <div className="currentFolder">
-                    {currentFolder.name}
+        const noteId = this.props.match.params.noteId;
+        const allNoteIds = this.context.notes.map(note => note.id)
+        if (!allNoteIds.includes(noteId)) {
+            return ( <div className="notfound">Error: Note not found.</div>)
+        } else {
+            const currentNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
+            const currentFolder = this.context.folders.find(folder => folder.id === currentNote.folderId);
+            return (
+                <div className="currentNote">
+                    <section>
+                        <Link 
+                            to={`/folder/${currentFolder.id}`} 
+                            className="goBack">
+                        Go Back
+                        </Link>
+                        <div className="currentFolder">
+                            {currentFolder.name}
+                        </div>
+                    </section>
+                    <section>
+                        <div className="note">
+                            {currentNote.name}
+                            <div className="modified">
+                                {currentNote.modified}
+                            </div>
+                        </div>
+                        <p className="content">{currentNote.content}</p>
+                    </section>
+                    
+                    
                 </div>
-            </section>
-            <section>
-                <div className="note">
-                    {currentNote.name}
-                    <div className="modified">
-                        {currentNote.modified}
-                    </div>
-                </div>
-                <p className="content">{currentNote.content}</p>
-              </section>
-              
-              
-        </div>
-    )
+            )
+        }
     }
 }
-
-/**
- * get a param that contains the note id
- * 
- * use that like we did in folders to find the
- * note
- * 
- */

@@ -1,38 +1,44 @@
-import React, { Component } from 'react';
-import store from './store.js';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import './Main.css'
+import FolderList from './FolderList';
+import UserContext from './UserContext';
+
+import './Main.css';
 
 
-export default class App extends Component {
+export default class App extends React.Component {
+
+    static contextType = UserContext;
 
     render() {
-        const matchingNotes = store.notes.filter(note => note.folderId === this.props.match.params.folderId);
-      return (
-          <div className="notesHome">
-              <section className="mainFolders">
-                    {store.folders.map(folder =>
-                    <div className="folder" key={folder.id}>
-                        <Link to={`/folder/${folder.id}`}>
-                        {folder.name}
-                        </Link>
-                    </div>
-                    )}
-              </section>
-              <section className="mainNotes">
-                    {matchingNotes.map(note =>
-                    <div className="note" key={note.id}>
-                        <Link to={`/note/${note.id}`}>
-                        {note.name}
-                        </Link>
-                        <div className="modified">
-                            {note.modified}
+        const folderId = this.props.match.params.folderId;
+        const allFolderIds = this.context.folders.map(folder => folder.id);
+        if (!allFolderIds.includes(folderId)) {
+            return ( <div className="notfound">Error: Folder not found.</div>)
+        } else {
+            const matchingNotes = this.context.notes.filter(note => note.folderId === folderId);
+            this.context.setNewNoteFolderId(folderId)
+            return (
+                <div className="notesHome">
+                    <FolderList />
+                    <section className="mainNotes">
+                        {matchingNotes.map(note =>
+                            <div className="note" key={note.id}>
+                                <Link to={`/note/${note.id}`}>
+                                {note.name}
+                                </Link>
+                                <div className="modified">
+                                    {note.modified}
+                                </div>
+                                <button onClick={() => this.context.handleDeleteNote(note.id)}>Delete</button>
+                            </div>
+                        )}
+                        <div>
+                            <Link to={`/addnote`}>Add A Note</Link>
                         </div>
-                    </div>
-                    )}
-              </section>
-              {console.log(this.props.match.params.folderId)}
-          </div>
-      );
+                    </section>
+                </div>
+            );
+        }
     }
 }

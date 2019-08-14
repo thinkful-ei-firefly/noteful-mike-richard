@@ -1,15 +1,16 @@
 
 
-.folder, .note {
+.folder, .note, .addFolder {
     border: 1px solid black;
+    margin: 1px 10px 1px 0px;
 }
 
 .mainFolder {
     padding-top: 10px;
 }
 
-.folder {
-    padding: 30px 100px; /*top/bottom right/left*/
+.folder, .addFolder {
+    padding: 30px 80px; /*top/bottom right/left*/
 }
 
 .note {
@@ -25,5 +26,5 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
 }
-
