@@ -70,8 +70,8 @@ class App extends React.Component {
 
 	getTimeStamp = () => {
 		const d = new Date(),
-			month = '' + (d.getMonth() + 1),
-			day = '' + d.getDate(),
+			month = ('0' + (d.getMonth() + 1)).slice(-2),
+			day = ('0' + d.getDate()).slice(-2),
 			year = '' + d.getFullYear(),
 			hour = '' + d.getHours(),
 			min = '' + d.getMinutes(),
