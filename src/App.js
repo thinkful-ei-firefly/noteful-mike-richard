@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
+import { API_KEY, DB_URL } from './config';
 import Main from './components/Main';
 import Folder from './components/Folder';
 import Note from './components/Note';
@@ -10,9 +11,6 @@ import UserContext from './UserContext';
 import history from './history';
 
 import './styles/App.css';
-
-const API_TOKEN = '5ef66e09-4651-4048-9d1a-a4c19bf3ec27';
-const DB_URL = 'https://stark-harbor-95475.herokuapp.com';
 
 class App extends React.Component {
 
@@ -32,7 +30,7 @@ class App extends React.Component {
 		fetch(`${DB_URL}/api/folders`, {
 			method: 'GET',
 			headers: {
-				'Authorization': `Bearer ${API_TOKEN}`
+				'Authorization': `Bearer ${API_KEY}`
 			}
 		})
 			.then(res => res.json())
@@ -45,7 +43,7 @@ class App extends React.Component {
 		fetch(`${DB_URL}/api/notes`, {
 			method: 'GET',
 			headers: {
-				'Authorization': `Bearer ${API_TOKEN}`
+				'Authorization': `Bearer ${API_KEY}`
 			}
 		})
 			.then(res => res.json())
@@ -108,7 +106,7 @@ class App extends React.Component {
 		fetch(`${DB_URL}/api/folders`, {
 			method: 'POST',
 			headers: {
-				'Authorization': `Bearer ${API_TOKEN}`,
+				'Authorization': `Bearer ${API_KEY}`,
 				'content-type': 'application/json'
 			},
 			body: JSON.stringify({
@@ -124,7 +122,7 @@ class App extends React.Component {
 		fetch(`${DB_URL}/api/notes`, {
 			method: 'POST',
 			headers: {
-				'Authorization': `Bearer ${API_TOKEN}`,
+				'Authorization': `Bearer ${API_KEY}`,
 				'content-type': 'application/json'
 			},
 			body: JSON.stringify({
@@ -141,7 +139,7 @@ class App extends React.Component {
 		fetch(`${DB_URL}/api/notes/${noteId}`, {
 			method: 'Delete',
 			headers: {
-				'Authorization': `Bearer ${API_TOKEN}`,
+				'Authorization': `Bearer ${API_KEY}`,
 				'content-type': 'application/json'
 			},
 		})
