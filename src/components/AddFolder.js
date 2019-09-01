@@ -1,7 +1,7 @@
 import React from 'react';
-import UserContext from './UserContext';
+import UserContext from '../UserContext';
 
-import './addFolder.css'
+import '../styles/addFolder.css'
 
 export default class AddFolder extends React.Component {
 
@@ -18,8 +18,8 @@ export default class AddFolder extends React.Component {
                             id="addfolder"
                             type="text"
                             required
-                            value={this.context.newFolderName}
-                            onChange={e => this.context.setNewFolderName(e.target.value)}
+                            value={this.context.newFolderTitle}
+                            onChange={e => this.context.setNewFolderTitle(e.target.value)}
                         />
                     </label>
                     <button type="submit">Add Folder</button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import UserContext from './UserContext';
+import UserContext from '../UserContext';
 
 export default class FolderList extends React.Component {
 
@@ -12,7 +12,7 @@ export default class FolderList extends React.Component {
                 {this.context.folders.map(folder =>
                     <div className="folder" key={folder.id}>
                         <Link to={`/folder/${folder.id}`}>
-                        {folder.name}
+                        {folder.title}
                         </Link>
                     </div>
                 )}

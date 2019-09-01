@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FolderList from './FolderList';
-import UserContext from './UserContext';
+import UserContext from '../UserContext';
 
-import './Main.css';
+import '../styles/Main.css';
 
 
 export default class App extends React.Component {
@@ -22,12 +22,12 @@ export default class App extends React.Component {
     }
 
     render() {
-        const folderId = this.props.match.params.folderId;
+        const folderId = parseInt(this.props.match.params.folderId);
         const allFolderIds = this.context.folders.map(folder => folder.id);
         if (!allFolderIds.includes(folderId)) {
             return ( <div className="notfound">Error: Folder not found.</div>)
         } else {
-            const matchingNotes = this.context.notes.filter(note => note.folderId === folderId);
+            const matchingNotes = this.context.notes.filter(note => parseInt(note.folderid) === folderId);
             this.context.setNewNoteFolderId(folderId)
             return (
                 <div className="notesHome">
@@ -36,10 +36,10 @@ export default class App extends React.Component {
                         {matchingNotes.map(note =>
                             <div className="note" key={note.id}>
                                 <Link to={`/note/${note.id}`}>
-                                {note.name}
+                                {note.title}
                                 </Link>
                                 <div className="modified">
-                                    {this.formatDate(note.modified)}
+                                    {note.modified.slice(0, 15)}
                                 </div>
                                 <button onClick={() => this.context.handleDeleteNote(note.id)}>Delete</button>
                             </div>

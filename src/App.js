@@ -1,15 +1,18 @@
 import React from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import Main from './Main';
-import Folder from './Folder';
-import Note from './Note';
-import AddFolder from './AddFolder';
-import AddNote from './AddNote';
-import NotFoundPage from './NotFoundPage';
+import Main from './components/Main';
+import Folder from './components/Folder';
+import Note from './components/Note';
+import AddFolder from './components/AddFolder';
+import AddNote from './components/AddNote';
+import NotFoundPage from './components/NotFoundPage';
 import UserContext from './UserContext';
 import history from './history';
 
-import './App.css';
+import './styles/App.css';
+
+const API_TOKEN = '5ef66e09-4651-4048-9d1a-a4c19bf3ec27';
+const DB_URL = 'https://stark-harbor-95475.herokuapp.com';
 
 class App extends React.Component {
 
@@ -17,42 +20,58 @@ class App extends React.Component {
 
     state = {
 		folders: [],
-		newFolderName: '',
+		newFolderTitle: '',
 		notes: [],
 		newNoteFolderId: '',
-		newNoteName: '',
+		newNoteTitle: '',
 		newNoteContent: '',
-		loading: true,
+		loading: true
 	}
 	
 	getState = () => {
-		fetch(`http://localhost:8080/db`)
+		fetch(`${DB_URL}/api/folders`, {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${API_TOKEN}`
+			}
+		})
 			.then(res => res.json())
 			.then(resJson => {
 				this.setState({
-					folders: resJson.folders,
-					newFolderName: '',
-					notes: resJson.notes,
-					newNoteName: '',
+					folders: resJson,
+					newFolderTitle: ''
+				})
+			})
+		fetch(`${DB_URL}/api/notes`, {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${API_TOKEN}`
+			}
+		})
+			.then(res => res.json())
+			.then(resJson => {
+				this.setState({
+					notes: resJson,
+					newNoteTitle: '',
 					newNoteContent: '',
 					loading: false,
 				})
 			})
-	}
+}
 
 	componentDidMount() {
 		this.getState();
 	}
 	
-	setNewFolderName = (name) => {
+	setNewFolderTitle = (title) => {
 		this.setState({
-			newFolderName: name,
+			newFolderTitle: title,
 		})
 	}
 
-	setNewNoteName = (name) => {
+	setNewNoteTitle = (title) => {
 		this.setState({
-			newNoteName: name,
+			newNoteTitle: title,
 		})
 	}
 
@@ -65,34 +84,35 @@ class App extends React.Component {
 	noteFolderId = '';
 
 	setNewNoteFolderId = (id) => {
-		this.noteFolderId = id;
+		this.noteFolderId = id; //this is a number, tried changeing to string using .toString() without success
 	}
 
-	getTimeStamp = () => {
-		const d = new Date(),
-			month = ('0' + (d.getMonth() + 1)).slice(-2),
-			day = ('0' + d.getDate()).slice(-2),
-			year = '' + d.getFullYear(),
-			hour = '' + d.getHours(),
-			min = '' + d.getMinutes(),
-			sec = '' + d.getSeconds(),
-			msec = '' + d.getMilliseconds();
-		console.log(`hours: ${hour}, min: ${min}, sec: ${sec}`)
-		return [[[
-			[year, month, day].join('-'), 
-			[hour, min, sec].join(':')
-			].join('T'), msec].join('.'), 'Z'].join('')
-	}
+	// getTimeStamp = () => {
+	// 	const d = new Date(),
+	// 		month = ('0' + (d.getMonth() + 1)).slice(-2),
+	// 		day = ('0' + d.getDate()).slice(-2),
+	// 		year = '' + d.getFullYear(),
+	// 		hour = '' + d.getHours(),
+	// 		min = '' + d.getMinutes(),
+	// 		sec = '' + d.getSeconds(),
+	// 		msec = '' + d.getMilliseconds();
+	// 	// console.log(`year: ${year}, month: ${month}, day: ${day}, hours: ${hour}, min: ${min}, sec: ${sec}`)
+	// 	return [[[
+	// 		[year, month, day].join('-'), 
+	// 		[hour, min, sec].join(':')
+	// 		].join('T'), msec].join('.'), 'Z'].join('')
+	// }
 
 	handleAddFolder = (e) => {
 		e.preventDefault();
-		fetch(`http://localhost:8080/folders`, {
+		fetch(`${DB_URL}/api/folders`, {
 			method: 'POST',
 			headers: {
+				'Authorization': `Bearer ${API_TOKEN}`,
 				'content-type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: this.state.newFolderName	
+				title: this.state.newFolderTitle	
 			})
 		})
 		.then(() => this.getState())
@@ -101,16 +121,15 @@ class App extends React.Component {
 
 	handleAddNote = (e) => {
 		e.preventDefault()
-		const dateTimeStamp = this.getTimeStamp();
-		fetch('http://localhost:8080/notes', {
+		fetch(`${DB_URL}/api/notes`, {
 			method: 'POST',
 			headers: {
+				'Authorization': `Bearer ${API_TOKEN}`,
 				'content-type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: this.state.newNoteName,
-				modified: dateTimeStamp,
-				folderId: this.noteFolderId,
+				title: this.state.newNoteTitle,
+				folderid: this.noteFolderId,
 				content: this.state.newNoteContent
 			})
 		})
@@ -119,9 +138,10 @@ class App extends React.Component {
 	}
 
 	handleDeleteNote = (noteId) => {
-		fetch(`http://localhost:8080/notes/${noteId}`, {
+		fetch(`${DB_URL}/api/notes/${noteId}`, {
 			method: 'Delete',
 			headers: {
+				'Authorization': `Bearer ${API_TOKEN}`,
 				'content-type': 'application/json'
 			},
 		})
@@ -133,7 +153,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		const {loading, ...props} = this.state
+		const { loading } = this.state
 		if (loading) {
 			return ( <div>loading . . .</div>)
 		} else {
@@ -144,46 +164,46 @@ class App extends React.Component {
 				</header>
 				<main>
 				<UserContext.Provider
-				value= {{
-					folders: this.state.folders,
-					notes: this.state.notes,
-					handleDeleteNote: this.handleDeleteNote,
-					handleAddFolder: this.handleAddFolder,
-					newFolderName: this.state.newFolderName,
-					setNewFolderName: this.setNewFolderName,
-					handleAddNote: this.handleAddNote,
-					newNoteName: this.state.newNoteName,
-					setNewNoteName: this.setNewNoteName,
-					newNoteContent: this.state.NewNoteContent,
-					setNewNoteContent: this.setNewNoteContent,
-					setNewNoteFolderId: this.setNewNoteFolderId,
-				}}>
-				<Switch>
-					<Route
-						exact
-						path='/'
-						component={Main}
-					/>
-					<Route
-						path='/folder/:folderId'
-						component={Folder}
-					/>
-					<Route
-						path='/note/:noteId'
-						component={Note}
-					/>
-					<Route
-						path='/addfolder'
-						component={AddFolder}
-					/>
-					<Route
-						path='/addnote'
-						component={AddNote}
-					/>
-					<Route 
-						component={NotFoundPage}
-					/>
-				</Switch>
+					value= {{
+						folders: this.state.folders,
+						notes: this.state.notes,
+						handleDeleteNote: this.handleDeleteNote,
+						handleAddFolder: this.handleAddFolder,
+						newFolderTitle: this.state.newFolderTitle,
+						setNewFolderTitle: this.setNewFolderTitle,
+						handleAddNote: this.handleAddNote,
+						newNoteTitle: this.state.newNoteTitle,
+						setNewNoteTitle: this.setNewNoteTitle,
+						newNoteContent: this.state.NewNoteContent,
+						setNewNoteContent: this.setNewNoteContent,
+						setNewNoteFolderId: this.setNewNoteFolderId,
+					}}>
+					<Switch>
+						<Route
+							exact
+							path='/'
+							component={Main}
+						/>
+						<Route
+							path='/folder/:folderId'
+							component={Folder}
+						/>
+						<Route
+							path='/note/:noteId'
+							component={Note}
+						/>
+						<Route
+							path='/addfolder'
+							component={AddFolder}
+						/>
+						<Route
+							path='/addnote'
+							component={AddNote}
+						/>
+						<Route 
+							component={NotFoundPage}
+						/>
+					</Switch>
 				</UserContext.Provider>
 				</main>
 			</div>
@@ -192,4 +212,4 @@ class App extends React.Component {
 	}
 }
 
-export default App //withRouter(App)
+export default App

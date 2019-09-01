@@ -1,7 +1,7 @@
 import React from 'react';
-import UserContext from './UserContext'
+import UserContext from '../UserContext'
 
-import './addNote.css'
+import '../styles/addNote.css'
 
 export default class AddNote extends React.Component {
 
@@ -12,14 +12,14 @@ export default class AddNote extends React.Component {
             <section>
                 <form className="addnote" onSubmit={this.context.handleAddNote}>
                     <legend>Create a New Note</legend>
-                    <label htmlFor="notename">
-                        New Name Name:
-                        <input 
-                            id="notename"
+                    <label htmlFor="notetitle">
+                        Name:
+                        <input
+                            id="notetitle"
                             type="text"
                             required
-                            value={this.context.newNoteName}
-                            onChange={e => this.context.setNewNoteName(e.target.value)}
+                            value={this.context.newNoteTitle}
+                            onChange={e => this.context.setNewNoteTitle(e.target.value)}
                         />
                     </label>
                     <label htmlFor="notecontent">

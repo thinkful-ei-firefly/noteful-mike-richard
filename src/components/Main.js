@@ -2,7 +2,7 @@ import React from 'react';
 import FolderList from './FolderList';
 import NoteList from './NoteList';
 
-import './Main.css';
+import '../styles/Main.css';
 
 
 export default class App extends React.Component {

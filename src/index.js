@@ -5,7 +5,7 @@ import App from './App';
 import history from './history';
 import ErrorBoundry from './ErrorBoundry';
 
-import './index.css';
+import './styles/index.css';
 
 ReactDOM.render(
   <Router history={history}>
