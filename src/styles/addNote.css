@@ -17,3 +17,8 @@ legend {
     margin: 20px;
     text-align: center;
 }
+
+.error {
+    font-size: smaller;
+    color: red;
+}

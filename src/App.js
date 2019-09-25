@@ -1,6 +1,6 @@
+
 import React from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import { API_KEY, DB_URL } from './config';
 import Main from './components/Main';
 import Folder from './components/Folder';
 import Note from './components/Note';
@@ -12,17 +12,23 @@ import history from './history';
 
 import './styles/App.css';
 
+require('dotenv').config()
+
+const API_KEY = process.env.REACT_APP_API_KEY;
+
+const DB_URL = 'https://stark-harbor-95475.herokuapp.com';
+
 class App extends React.Component {
 
 	static contextType = UserContext;
 
     state = {
 		folders: [],
-		newFolderTitle: '',
 		notes: [],
+		// newFolderTitle: '',
 		newNoteFolderId: '',
-		newNoteTitle: '',
-		newNoteContent: '',
+		// newNoteTitle: '',
+		// newNoteContent: '',
 		loading: true
 	}
 	
@@ -55,29 +61,29 @@ class App extends React.Component {
 					loading: false,
 				})
 			})
-}
+	}
 
 	componentDidMount() {
 		this.getState();
 	}
 	
-	setNewFolderTitle = (title) => {
-		this.setState({
-			newFolderTitle: title,
-		})
-	}
+	// setNewFolderTitle = (title) => {
+	// 	this.setState({
+	// 		newFolderTitle: title,
+	// 	})
+	// }
 
-	setNewNoteTitle = (title) => {
-		this.setState({
-			newNoteTitle: title,
-		})
-	}
+	// setNewNoteTitle = (title) => {
+	// 	this.setState({
+	// 		newNoteTitle: title,
+	// 	})
+	// }
 
-	setNewNoteContent = (text) => {
-		this.setState({
-			newNoteContent: text,
-		})
-	}
+	// setNewNoteContent = (text) => {
+	// 	this.setState({
+	// 		newNoteContent: text,
+	// 	})
+	// }
 
 	noteFolderId = '';
 
@@ -85,24 +91,8 @@ class App extends React.Component {
 		this.noteFolderId = id; //this is a number, tried changeing to string using .toString() without success
 	}
 
-	// getTimeStamp = () => {
-	// 	const d = new Date(),
-	// 		month = ('0' + (d.getMonth() + 1)).slice(-2),
-	// 		day = ('0' + d.getDate()).slice(-2),
-	// 		year = '' + d.getFullYear(),
-	// 		hour = '' + d.getHours(),
-	// 		min = '' + d.getMinutes(),
-	// 		sec = '' + d.getSeconds(),
-	// 		msec = '' + d.getMilliseconds();
-	// 	// console.log(`year: ${year}, month: ${month}, day: ${day}, hours: ${hour}, min: ${min}, sec: ${sec}`)
-	// 	return [[[
-	// 		[year, month, day].join('-'), 
-	// 		[hour, min, sec].join(':')
-	// 		].join('T'), msec].join('.'), 'Z'].join('')
-	// }
+	handleAddFolder = (folderTitle) => {
 
-	handleAddFolder = (e) => {
-		e.preventDefault();
 		fetch(`${DB_URL}/api/folders`, {
 			method: 'POST',
 			headers: {
@@ -110,15 +100,14 @@ class App extends React.Component {
 				'content-type': 'application/json'
 			},
 			body: JSON.stringify({
-				title: this.state.newFolderTitle	
+				title: folderTitle	
 			})
 		})
 		.then(() => this.getState())
 		.then(() => history.push('/'))
 	}
 
-	handleAddNote = (e) => {
-		e.preventDefault()
+	handleAddNote = (newNoteTitle, newNoteContent) => {
 		fetch(`${DB_URL}/api/notes`, {
 			method: 'POST',
 			headers: {
@@ -126,9 +115,9 @@ class App extends React.Component {
 				'content-type': 'application/json'
 			},
 			body: JSON.stringify({
-				title: this.state.newNoteTitle,
+				title: newNoteTitle,
 				folderid: this.noteFolderId,
-				content: this.state.newNoteContent
+				content: newNoteContent
 			})
 		})
 		.then(() => this.getState())
@@ -150,6 +139,8 @@ class App extends React.Component {
 		})
 	}
 
+	
+
 	render() {
 		const { loading } = this.state
 		if (loading) {
@@ -167,13 +158,13 @@ class App extends React.Component {
 						notes: this.state.notes,
 						handleDeleteNote: this.handleDeleteNote,
 						handleAddFolder: this.handleAddFolder,
-						newFolderTitle: this.state.newFolderTitle,
-						setNewFolderTitle: this.setNewFolderTitle,
+						// newFolderTitle: this.state.newFolderTitle,
+						// setNewFolderTitle: this.setNewFolderTitle,
 						handleAddNote: this.handleAddNote,
-						newNoteTitle: this.state.newNoteTitle,
-						setNewNoteTitle: this.setNewNoteTitle,
-						newNoteContent: this.state.NewNoteContent,
-						setNewNoteContent: this.setNewNoteContent,
+						// newNoteTitle: this.state.newNoteTitle,
+						// setNewNoteTitle: this.setNewNoteTitle,
+						// newNoteContent: this.state.NewNoteContent,
+						// setNewNoteContent: this.setNewNoteContent,
 						setNewNoteFolderId: this.setNewNoteFolderId,
 					}}>
 					<Switch>
@@ -209,5 +200,6 @@ class App extends React.Component {
 		}
 	}
 }
+
 
 export default App
